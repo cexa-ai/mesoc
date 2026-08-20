@@ -1,0 +1,13 @@
+{
+  "network": "bscTestnet",
+  "chainId": 97,
+  "paymentContractAddress": "0xA67f135E196f1d535d981C69210f5A084520F009",
+  "usdt": {
+    "tokenAddress": "0xDa548359433e9c061Cf54Cf507d9Ff9A23A1fdf9",
+    "decimals": 6,
+    "symbol": "USDT",
+    "minAmount": "100000"
+  },
+  "deployedAt": "2026-04-27T08:22:39.803Z",
+  "deployer": "0xAe4E98564350aC17E4034aaF34754BCD8fC0720d"
+}
