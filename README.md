@@ -33,8 +33,6 @@ SPDX: `MIT`
 | BSC Mainnet | 56 | [`0x19cb281e4ff3b9941418f0df6f5817abe4ec2a07`](https://bscscan.com/address/0x19cb281e4ff3b9941418f0df6f5817abe4ec2a07) |
 | BSC Testnet | 97 | [`0xA67f135E196f1d535d981C69210f5A084520F009`](https://testnet.bscscan.com/address/0xA67f135E196f1d535d981C69210f5A084520F009) |
 
-JSON records: [`deployments/`](./deployments/)
-
 ## Core API
 
 ```solidity
