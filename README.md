@@ -1,13 +1,25 @@
-# Mesoc Payment Contract
+# PaymentContract (V2)
 
-Open-source Solidity payment contract used by [Mesoc](https://github.com/cexa-ai) for on-chain payments (native coin + ERC-20).
+Open-source Solidity payment contract for on-chain checkout (BNB native coin + ERC-20 such as USDT).
 
-> Source of truth in monorepo historically lived at `ai-agent/contracts/contracts/PaymentContractV2.sol`.  
-> Contract name on-chain: **`PaymentContract`** (V2 implementation).
+> On-chain contract name: **`PaymentContract`**  
+> Source in monorepo: `ai-agent/contracts/contracts/PaymentContractV2.sol`
+
+## Where it is used
+
+This contract is **not** the Mesoc red-packet / wallet transfer path.
+
+In the current codebase it is wired for:
+
+- **Vision / Luflux membership** on-chain pay (`vision/luflux` → `getPaymentContractAddress` / `membership-onchain-pay`)
+- **Claw billing** (`claw/api` billing → payment contract address)
+- **CoreService** payment indexer (`PaymentReceived(paymentSn)` via `payment-contracts.json`)
+
+Mesoc server code does **not** reference this contract.
 
 ## Features
 
-- Native coin payments (`token = address(0)`, default BNB on BSC)
+- Native coin payments (`token = address(0)`, symbol `BNB` on BSC)
 - ERC-20 payments via `addSupportedToken(...)` (e.g. USDT)
 - Emits `PaymentReceived(payer, token, amount, paymentSn)` for off-chain indexers
 - Owner withdraw, pause / unpause, per-token minimum amount
@@ -16,17 +28,12 @@ Open-source Solidity payment contract used by [Mesoc](https://github.com/cexa-ai
 
 - [`contracts/PaymentContractV2.sol`](./contracts/PaymentContractV2.sol)
 
-Dependencies (OpenZeppelin):
-
-- `Ownable`
-- `ReentrancyGuard`
-- `Pausable`
-- `IERC20` / `SafeERC20`
+Dependencies (OpenZeppelin): `Ownable`, `ReentrancyGuard`, `Pausable`, `IERC20` / `SafeERC20`
 
 Solidity: `^0.8.19`  
 SPDX: `MIT`
 
-## Deployments (public)
+## Deployed addresses (public)
 
 | Network | Chain ID | PaymentContract |
 |---------|----------|-----------------|
@@ -47,15 +54,15 @@ function pause() external;
 function unpause() external;
 ```
 
-Native payments: pass `token = address(0)`, `amount = 0`, and send `msg.value`.  
-ERC-20 payments: approve this contract first, then call `pay(token, amount, paymentSn)` with `msg.value = 0`.
+Native: `token = address(0)`, `amount = 0`, send `msg.value`.  
+ERC-20: approve this contract, then `pay(token, amount, paymentSn)` with `msg.value = 0`.
 
 ## Security notes
 
-- Fee-on-transfer tokens are rejected (`paidAmount == amount` check).
-- Native token config (`address(0)`) is initialized in the constructor and cannot be removed via `removeSupportedToken`.
-- Only `owner` can withdraw funds and manage token allowlist.
+- Fee-on-transfer tokens are rejected (`paidAmount == amount`).
+- Native token config (`address(0)`) is set in the constructor and cannot be removed via `removeSupportedToken`.
+- Only `owner` can withdraw and manage the token allowlist.
 
 ## Disclaimer
 
-This repository publishes the payment contract for transparency. Always audit and verify bytecode against the deployed address before integrating in production.
+Published for transparency. Verify on-chain bytecode against the deployed address before production use.
